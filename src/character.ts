@@ -7,7 +7,8 @@ export default class character {
     public position: Vector = new Vector();
     private source: string[];
     private canvas: any;
-
+    private mirrored: boolean = false;
+    
     public size: {
         w: number,
         h: number 
@@ -50,7 +51,6 @@ export default class character {
                 this.size.w / 2 * Math.min(1.5, clipPrecentage), 
                 this.size.h
             );
-    
             context.drawImage(this.imageObj2, 
                 this.imageObj2.width / 2 + this.imageObj2.width / 2 * Math.max(0, clipPrecentage - 0.5), 
                 0,
@@ -60,7 +60,7 @@ export default class character {
                 this.position.y, 
                 this.size2.w / 2 * (1 -  Math.max(0, clipPrecentage - 0.5)), 
                 this.size2.h
-            );    
+            );  
         } else {
             context.drawImage(this.imageObj, 
                 0, 

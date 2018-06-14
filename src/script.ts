@@ -1,32 +1,33 @@
 import character from './character';
 import Line from './Line';
 import ImageButton from './UI/imageButton';
+import CharacterSelection from './UI/CharacterSelection';
 
 window.addEventListener('load', () => {
     //canvas and context
     let canvas: any = document.getElementById('canvas');
     let context: CanvasRenderingContext2D = canvas.getContext('2d');
-    let canvasWidth: number = .8;
+    let canvasWidth: number = .7;
     
     //objects
     let char: character;
     let line: Line = new Line(canvas, context);
 
     //ui
-    let button: ImageButton;
-    let button2: ImageButton;
+    let selection: CharacterSelection;
 
     constructor();
     function constructor(): void {
 
-        char = new character(['2', '1']);
+        char = new character(['3']);
 
-        button = new ImageButton(50, 50, '3', () => {
-            char.Source = ['3'];
+        
+
+        selection = new CharacterSelection( (key:string) => {
+            console.log('fedgn');
+            char.Source = [key];
         });
-        button2 = new ImageButton(175, 50, '2', () => {
-            char.Source = ['1', '2'];
-        });
+
         resize();
     }
     
@@ -54,8 +55,6 @@ window.addEventListener('load', () => {
         //objects
         char.DrawImage(canvas, context, line.position.x);
         line.DrawImage(canvas, context);
-        button2.Render(context);
-        button.Render(context);
     }
     function resize(): void {
         canvas.width = window.innerWidth * canvasWidth;
@@ -73,8 +72,6 @@ window.addEventListener('load', () => {
             x : e.pageX - canvas.getBoundingClientRect().left,
             y : e.pageY - canvas.getBoundingClientRect().top
         };
-        button.ClickCheck(pos.x, pos.y);
-        button2.ClickCheck(pos.x, pos.y);
     });
 
     window.addEventListener('mousemove', function(e: any) {
