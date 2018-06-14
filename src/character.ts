@@ -1,4 +1,5 @@
 import Vector from './systems/Vector';
+import Constants, { CharacterInfo } from './data/Constants';
 
 export default class character {
     public imageObj: any;
@@ -7,8 +8,8 @@ export default class character {
     public position: Vector = new Vector();
     private source: string[];
     private canvas: any;
-    private mirrored: boolean = false;
-    
+
+    private characterInfo: CharacterInfo;    
     public size: {
         w: number,
         h: number 
@@ -26,11 +27,12 @@ export default class character {
  
         this.imageObj = new Image();
         this.imageObj2 = new Image();
-
-        this.Source = arrayOfFiles;
+        requestAnimationFrame(() => {
+            this.CharacterInfo = Constants.SOURCE_IMAGES[Constants.SOURCE_IMAGES.length - 1];
+        });
     } 
     
-    public DrawImage(canvas: any, context: any, mouseX: number = canvas.width / 2): void {
+    public DrawImage(canvas: any, context: CanvasRenderingContext2D, mouseX: number = canvas.width / 2): void {
         let clipPrecentage: number;
 
         if (this.oneFile) {
@@ -40,66 +42,65 @@ export default class character {
         }
         //console.log(clipPrecentage);
 
-        if (this.oneFile) {
-            context.drawImage(this.imageObj, 
-                -this.imageObj.width / 4, 
-                0, 
-                this.imageObj.width / 2 * Math.min(1.5, clipPrecentage), 
-                this.imageObj.height,
-                this.position.x - this.size.w / 2, 
-                this.position.y, 
-                this.size.w / 2 * Math.min(1.5, clipPrecentage), 
-                this.size.h
-            );
-            context.drawImage(this.imageObj2, 
-                this.imageObj2.width / 2 + this.imageObj2.width / 2 * Math.max(0, clipPrecentage - 0.5), 
-                0,
-                this.imageObj2.width / 2 *  (1 -  Math.max(0, clipPrecentage - 0.5)), 
-                this.imageObj2.height,
-                this.position.x - this.size2.w / 2 * (1 -  Math.max(0, clipPrecentage - 0.5)) + this.size2.w / 4, 
-                this.position.y, 
-                this.size2.w / 2 * (1 -  Math.max(0, clipPrecentage - 0.5)), 
-                this.size2.h
-            );  
-        } else {
-            context.drawImage(this.imageObj, 
-                0, 
-                0, 
-                this.imageObj.width * clipPrecentage, 
-                this.imageObj.height,
-                this.position.x - this.size.w / 2, 
-                this.position.y, 
-                this.size.w * clipPrecentage, 
-                this.size.h
-            );
-    
-            context.drawImage(this.imageObj2, 
-                this.imageObj2.width * clipPrecentage, 
-                0,
-                this.imageObj2.width *  (1 - clipPrecentage), 
-                this.imageObj2.height,
-                this.position.x - this.size2.w * (1 - clipPrecentage) + this.size2.w / 2, 
-                this.position.y, 
-                this.size2.w * (1 - clipPrecentage), 
-                this.size2.h
-            );    
-        }
+        this.drawClipRegion(true, context, mouseX, canvas);
+        context.drawImage(this.imageObj, 
+            0, 
+            0, 
+            this.imageObj.width / (this.oneFile ? 2 : 1), 
+            this.imageObj.height,
+            this.position.x - this.size.w / (this.oneFile ? 4 : 2), 
+            this.position.y, 
+            this.size.w / (this.oneFile ? 2 : 1), 
+            this.size.h
+        );
+
+        context.restore();
+
+        this.drawClipRegion(false, context, mouseX, canvas);
+        context.scale(this.characterInfo.invert ? -1 : 1, 1);
+
+        context.drawImage(this.imageObj2, 
+            (this.oneFile ? this.imageObj2.width / 2 : 0), 
+            0, 
+            this.imageObj.width / (this.oneFile ? 2 : 1), 
+            this.imageObj.height,
+            this.characterInfo.invert ? -(this.position.x + this.size.w / 4) : this.position.x - this.size.w / (this.oneFile ? 4 : 2), 
+            this.position.y, 
+            this.size.w / (this.oneFile ? 2 : 1), 
+            this.size.h
+        );
+
+        context.restore();
+
+        return;
 
     } 
 
-    public get Source(): string[] {
-        return this.source;
+    public drawClipRegion(invert: boolean = true, context: CanvasRenderingContext2D, mouseX: number, canvas: any): void {
+        context.save();
+        context.beginPath();
+        context.moveTo(invert ? 0 : canvas.width, 0);
+        context.lineTo(mouseX, 0);
+        context.lineTo(mouseX, this.canvas.height);
+        context.lineTo(invert ? 0 : canvas.width, this.canvas.height);
+        context.closePath();
+        context.clip();
+
     }
 
-    public set Source(value: string[]) {
-        this.source = value;
+    public get CharacterInfo(): CharacterInfo {
+        return this.characterInfo;
+    }
+
+    public set CharacterInfo(value: CharacterInfo) {
+        this.characterInfo = value;
         
-        this.oneFile = this.source.length === 1;
-        this.imageObj.src = 'assets/' + this.source[0] + '.png';
+        this.oneFile = this.characterInfo.sources.length === 1;
+        this.imageObj.src = 'assets/characters/' + this.characterInfo.sources[0] + '.png';
         if (this.oneFile) {
-            this.imageObj2.src = 'assets/' + this.source[0] + '.png';
+            this.imageObj2.src = 'assets/characters/' + this.characterInfo.sources[0] + '.png';
         } else {
-            this.imageObj2.src = 'assets/' + this.source[1] + '.png';
+            this.imageObj2.src = 'assets/characters/' + this.characterInfo.sources[1] + '.png';
         }
         if (this.canvas) {
             this.resize(this.canvas);

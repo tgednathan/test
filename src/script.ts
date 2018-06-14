@@ -2,6 +2,7 @@ import character from './character';
 import Line from './Line';
 import ImageButton from './UI/imageButton';
 import CharacterSelection from './UI/CharacterSelection';
+import { CharacterInfo } from './data/Constants';
 
 window.addEventListener('load', () => {
     //canvas and context
@@ -23,9 +24,9 @@ window.addEventListener('load', () => {
 
         
 
-        selection = new CharacterSelection( (key:string) => {
+        selection = new CharacterSelection( (key: CharacterInfo) => {
             console.log('fedgn');
-            char.Source = [key];
+            char.CharacterInfo = key;
         });
 
         resize();
