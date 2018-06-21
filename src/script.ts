@@ -9,7 +9,26 @@ window.addEventListener('load', () => {
     let canvas: any = document.getElementById('canvas');
     let context: CanvasRenderingContext2D = canvas.getContext('2d');
     let canvasWidth: number = .7;
+
+    let submit: any = document.getElementsByClassName('submit')[0];
+    let file: any = document.getElementsByClassName('file')[0];
+    submit.onclick = () => {
+        console.log(submit, file);
+        try {
+            let scr: CharacterInfo = {
+                sources: [window.URL.createObjectURL(file.files[0])],
+                invert: false,
+                width: 2,
+                height: 1
+            };
+            console.log(scr.sources[0]);
+            char.CharacterInfo =  scr;   
+        } catch {
+            console.log('no Image');
+        }
     
+    };
+
     //objects
     let char: character;
     let line: Line = new Line(canvas, context);
@@ -21,8 +40,6 @@ window.addEventListener('load', () => {
     function constructor(): void {
 
         char = new character(['3']);
-
-        
 
         selection = new CharacterSelection( (key: CharacterInfo) => {
             console.log('fedgn');

@@ -96,11 +96,11 @@ export default class character {
         this.characterInfo = value;
         
         this.oneFile = this.characterInfo.sources.length === 1;
-        this.imageObj.src = 'assets/characters/' + this.characterInfo.sources[0] + '.png';
+        this.imageObj.src = this.characterInfo.sources[0];
         if (this.oneFile) {
-            this.imageObj2.src = 'assets/characters/' + this.characterInfo.sources[0] + '.png';
+            this.imageObj2.src = this.characterInfo.sources[0];
         } else {
-            this.imageObj2.src = 'assets/characters/' + this.characterInfo.sources[1] + '.png';
+            this.imageObj2.src = this.characterInfo.sources[1];
         }
         if (this.canvas) {
             this.resize(this.canvas);

@@ -15,7 +15,7 @@ export default class CharacterSelection {
     public ApplyButton(key: CharacterInfo, clickFunction: Function): void {
         let button: any = document.createElement("INPUT");
         button.type = 'BUTTON';
-        button.style.backgroundImage = 'url(assets/characters/' + key.sources[0] + '.png)';
+        button.style.backgroundImage = 'url(' + key.sources[0] + ')';
         button.onclick = () => {
             clickFunction(key);
         };
