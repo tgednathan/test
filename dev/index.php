@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>transformation</title>
+    <title>Transformation</title>
       <link rel="stylesheet" href="assets/style.css" type="text/css" />
       <script src="game.js"></script>
   </head>
@@ -10,7 +10,8 @@
             <input type="file" class="file">
             <input type="submit" class="submit">
         </div>
-        <p>Image selection</p>
+        <p>image selection    <?php echo 'hello'; ?>
+</p>
         <div class="characterselection">
       </div>
     </div>

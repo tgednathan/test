@@ -64,13 +64,14 @@ module.exports = {
             host: 'localhost',
             port: 3000,
             files: [
-                './template/*.html',
+                './template/*.php',
                 './src/*.ts',
                 './sass/*.scss',
                 './scr/*.js'],
-            server: {
-                baseDir: ['./dev']
-            }
+            // server: {
+            //     baseDir: ['./dev']
+            // }http://
+            proxy: 'localhost/lol/test.github.io/dev/' //to browser sync the php enviroment
         }, {
             reload: false
         }),
@@ -79,8 +80,8 @@ module.exports = {
             to: path.join(basePath, 'dev/assets')
         }]),
         new CopyWebpackPlugin([{
-            from: path.join(basePath, 'template/index.html'),
-            to: path.join(basePath, 'dev/index.html')
+            from: path.join(basePath, 'template/index.php'),
+            to: path.join(basePath, 'dev/index.php')
         }])
   ]
 
